@@ -6,8 +6,8 @@ import './index.css'; // Importa o arquivo de estilos que criamos
 function App() {
   const { leads, loading, carregarLeads } = useLeads();
 
-  const handleBuscar = async (cep, tipoEmpresa) => {
-    const resultado = await carregarLeads(cep, tipoEmpresa);
+    const handleBuscar = async (cep, tipoEmpresa, raio) => {
+    const resultado = await carregarLeads(cep, tipoEmpresa, raio);
     if (!resultado.success) {
       alert(resultado.error);
     }

@@ -5,18 +5,15 @@ export function useLeads() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const carregarLeads = async (cep, tipoEmpresa) => {
+  const carregarLeads = async (filtros) => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/leads', { cep, tipoEmpresa });
+      const response = await axios.post('http://localhost:5000/api/v1/leads', filtros);
       setLeads(response.data);
       return { success: true };
     } catch (error) {
-      console.error('Erro no Hook useLeads:', error);
-      return { 
-        success: false, 
-        error: error.response?.data?.error || 'Erro ao conectar com o servidor.' 
-      };
+      console.error(error);
+      return { success: false, error: error.response?.data?.error || 'Erro na conexão' };
     } finally {
       setLoading(false);
     }

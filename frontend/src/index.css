@@ -191,3 +191,55 @@ body {
   background-color: #475569;
   cursor: not-allowed;
 }
+
+/* Badges de Canais */
+.badge-link {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.badge-link.site {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.badge-link.site:hover {
+  background-color: #2563eb;
+}
+
+.badge-link.insta {
+  background-color: #ec4899;
+  color: #ffffff;
+}
+
+.badge-link.insta:hover {
+  background-color: #db2777;
+}
+
+.badge-link.disabled {
+  background-color: #334155;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* Botão de Ação do WhatsApp */
+.btn-wpp {
+  padding: 6px 12px;
+  background-color: #25d366;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-wpp:hover {
+  background-color: #128c7e;
+  transform: scale(1.03);
+}

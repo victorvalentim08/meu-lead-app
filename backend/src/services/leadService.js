@@ -29,9 +29,16 @@ class LeadService {
         const termoBusca = `${tipoEmpresa} em ${localidadeTexto} - ${ufTexto}`;
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
+        // 🌟 ALTERAÇÃO AQUI: Configuração otimizada para o servidor Linux do Render
         const browser = await puppeteer.launch({ 
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            headless: 'new',
+            args: [
+                '--no-sandbox', 
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--single-process'
+            ]
         });
         const page = await browser.newPage();
         

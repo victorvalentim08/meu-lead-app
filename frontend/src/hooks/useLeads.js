@@ -8,7 +8,7 @@ export function useLeads() {
   const carregarLeads = async (filtros) => {
     setLoading(true);
     try {
-      const response = await axios.post('https://meu-lead-app.onrender.com', filtros);
+      const response = await axios.post('https://meu-lead-app.onrender.com/api/v1/leads', filtros);
       setLeads(response.data);
       return { success: true };
     } catch (error) {

@@ -31,7 +31,7 @@ class LeadService {
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
         // 🌟 CONFIGURAÇÃO DEFINITIVA DE CAMINHO PARA O RENDER
-        const chromePath = path.join(process.cwd(), '.cache', 'puppeteer', 'chrome');
+        const chromePath = '/opt/render/.cache/puppeteer/chrome/linux-148.0.7778.97/chrome-linux64/chrome';
         
         const browser = await puppeteer.launch({ 
             headless: 'new',

@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
-const path = require('path'); // 🌟 Adicionado para resolver o caminho do Chrome
 
 class LeadService {
     async buscarLeads({ tipoEmpresa, cep, cidade, estado }) {
@@ -30,12 +29,8 @@ class LeadService {
         const termoBusca = `${tipoEmpresa} em ${localidadeTexto} - ${ufTexto}`;
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
-        // 🌟 CONFIGURAÇÃO DEFINITIVA DE CAMINHO PARA O RENDER
-        const chromePath = '/opt/render/project/src/.cache/puppeteer/chrome/linux-148.0.7778.97/chrome-linux64/chrome';
-        
-        const browser = await puppeteer.launch({ 
+        const launchOptions = {
             headless: 'new',
-            executablePath: chromePath, // 🌟 Força o Puppeteer a usar o Chrome baixado no Build
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',
@@ -43,7 +38,13 @@ class LeadService {
                 '--disable-gpu',
                 '--single-process'
             ]
-        });
+        };
+
+        if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+            launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+        }
+
+        const browser = await puppeteer.launch(launchOptions);
         const page = await browser.newPage();
         
         await page.setViewport({ width: 1400, height: 900 });
@@ -115,7 +116,7 @@ class LeadService {
                         nome: empresa.nome,
                         endereco: enderecoFinal,
                         site: empresa.url,
-                        whatsapp: empresa.telephone || 'Acessar Ficha do Maps',
+                        whatsapp: empresa.telefone || 'Acessar Ficha do Maps',
                         email: 'Não informado'
                     });
                     idCounter++;

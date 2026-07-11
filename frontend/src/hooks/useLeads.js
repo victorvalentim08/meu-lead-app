@@ -8,8 +8,7 @@ export function useLeads() {
   const carregarLeads = async (filtros) => {
     setLoading(true);
     try {
-      // 🌟 ATUALIZADO: Apontando para o seu novo backend estável em Docker
-      const response = await axios.post('https://backend-leads-7sjp.onrender.com/api/v1/leadsRoutes', filtros);
+      const response = await axios.post('https://backend-leads-7sjp.onrender.com/api/v1/leadRoutes', filtros);
       
       setLeads(response.data);
       return { success: true };

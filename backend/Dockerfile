@@ -13,8 +13,8 @@ RUN npm ci
 # Copia todo o resto do código para dentro do container
 COPY . .
 
-# Expõe a porta que o servidor Express usa
-EXPOSE 5000
+# Expõe a porta que o Render espera por padrão em containers
+EXPOSE 10000
 
 # Executa o servidor principal
 CMD ["node", "server.js"]

@@ -29,13 +29,11 @@ class LeadService {
         const termoBusca = `${tipoEmpresa} em ${localidadeTexto} - ${ufTexto}`;
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
-        // 🌟 CONFIGURAÇÃO PARA CACHE PADRÃO DO RENDER
-        // Aponta diretamente para onde o instalador global coloca o Chrome no servidor deles
-        const chromePath = '/opt/render/.cache/puppeteer/chrome/linux-148.0.7778.97/chrome-linux64/chrome';
-
+        // 🌟 CONFIGURAÇÃO PARA DOCKER (DEFINITIVA E UNIVERSAL)
+        // O container já vem com o Google Chrome instalado exatamente nesta pasta do Linux
         const launchOptions = {
             headless: 'new',
-            executablePath: chromePath,
+            executablePath: '/usr/bin/google-chrome',
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',

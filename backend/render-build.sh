@@ -5,6 +5,5 @@ set -o errexit
 # Instala as dependências do projeto
 npm install
 
-# Instala o Chrome do Puppeteer e armazena no cache local do projeto
-echo "--- Instalando o Google Chrome para o Puppeteer ---"
-npx puppeteer browsers install chrome
+echo "--- Instalando o Google Chrome na pasta local do Backend ---"
+PUPPETEER_CACHE_DIR=$(pwd)/.cache npx puppeteer browsers install chrome

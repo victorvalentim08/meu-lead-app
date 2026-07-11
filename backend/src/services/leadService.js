@@ -1,7 +1,5 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
-const path = require('path');
-const fs = require('fs');
 
 class LeadService {
     async buscarLeads({ tipoEmpresa, cep, cidade, estado }) {
@@ -31,27 +29,9 @@ class LeadService {
         const termoBusca = `${tipoEmpresa} em ${localidadeTexto} - ${ufTexto}`;
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
-        // 🌟 DETECÇÃO 100% DINÂMICA DO CHROME INSTALADO NO BUILD
-        const baseCacheDir = path.join(process.cwd(), '.cache', 'puppeteer', 'chrome');
-        let chromePath = '';
-
-        try {
-            if (fs.existsSync(baseCacheDir)) {
-                const versoes = fs.readdirSync(baseCacheDir);
-                // Procura por qualquer pasta que comece com "linux-" para não depender de números de versão estáticos
-                const pastaVersao = versoes.find(f => f.startsWith('linux-'));
-                
-                if (pastaVersao) {
-                    chromePath = path.join(baseCacheDir, pastaVersao, 'chrome-linux64', 'chrome');
-                    console.log(`[🤖 Puppeteer] Localizado dinamicamente em: ${chromePath}`);
-                }
-            }
-        } catch (err) {
-            console.error("Erro na varredura interna do cache do Chrome:", err.message);
-        }
-
         const launchOptions = {
             headless: 'new',
+            executablePath: '/usr/bin/google-chrome-stable',
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',
@@ -60,13 +40,6 @@ class LeadService {
                 '--single-process'
             ]
         };
-
-        // Aplica o caminho se ele existir fisicamente no servidor
-        if (chromePath && fs.existsSync(chromePath)) {
-            launchOptions.executablePath = chromePath;
-        } else {
-            console.log("[⚠️ Puppeteer] Caminho autodetectado inválido, tentando inicialização fallback padrão...");
-        }
 
         const browser = await puppeteer.launch(launchOptions);
         const page = await browser.newPage();
@@ -92,7 +65,7 @@ class LeadService {
                     const containerPai = link.closest('div.Nv2g1b') || link.parentElement;
                     
                     let enderecoDetectado = '';
-                    let telefoneDetectado = '';
+                    let telephoneDetectado = '';
 
                     if (containerPai) {
                         const spans = containerPai.querySelectorAll('span, div');
@@ -100,7 +73,7 @@ class LeadService {
                         spans.forEach(el => {
                             const texto = el.textContent.trim();
                             if (/\(\d{2}\)\s\d{4,5}-\d{4}/.test(texto)) {
-                                telefoneDetectado = texto;
+                                telephoneDetectado = texto;
                             }
                             else if (
                                 (texto.includes('Rua') || texto.includes('Av.') || texto.includes('R.') || texto.includes('Avenida') || texto.includes('Bairro') || texto.includes('Centro')) &&
@@ -119,7 +92,7 @@ class LeadService {
                             nome: nome,
                             url: urlFicha,
                             endereco: enderecoDetectado,
-                            telefone: telefoneDetectado
+                            telefone: telephoneDetectado
                         });
                     }
                 });

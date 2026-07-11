@@ -8,12 +8,14 @@ export function useLeads() {
   const carregarLeads = async (filtros) => {
     setLoading(true);
     try {
-      const response = await axios.post('https://meu-lead-app.onrender.com/api/v1/leads', filtros);
+      // 🌟 ATUALIZADO: Apontando para o seu novo backend estável em Docker
+      const response = await axios.post('https://backend-leads-7sjp.onrender.com/api/v1/leadsRoutes', filtros);
+      
       setLeads(response.data);
       return { success: true };
     } catch (error) {
       console.error(error);
-      return { success: false, error: error.response?.data?.error || 'Erro na conexão' };
+      return { success: false, error: error.response?.data?.error || 'Erro na conexão com o servidor.' };
     } finally {
       setLoading(false);
     }

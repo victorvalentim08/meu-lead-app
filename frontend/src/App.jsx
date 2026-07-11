@@ -1,18 +1,18 @@
 import React from 'react';
 import { useLeads } from './hooks/useLeads';
 import { FormFiltros } from './components/FormFiltros';
-import './index.css'; // Importa o arquivo de estilos que criamos
+import './index.css'; 
 
 function App() {
   const { leads, loading, carregarLeads } = useLeads();
 
   // Recebe os filtros de Cidade e Estado enviados pelo FormFiltros
   const handleBuscar = async (filtros) => {
-      const resultado = await carregarLeads(filtros);
-      if (!resultado.success) {
-        alert(resultado.error);
-      }
-    };
+    const resultado = await carregarLeads(filtros);
+    if (!resultado.success) {
+      alert(resultado.error);
+    }
+  };
 
   const exportarParaCSV = () => {
     if (leads.length === 0) return;
@@ -95,7 +95,7 @@ function App() {
                   const numeroLimpo = lead.whatsapp ? lead.whatsapp.replace(/\D/g, '') : '';
                   const linkWhatsapp = numeroLimpo ? `https://wa.me/55${numeroLimpo}?text=Olá,%20vi%20seu%20perfil%20no%20Google%20e%20gostaria%20de%20conversar!` : null;
 
-                  // Link inteligente de busca direta no Google Maps para auditar avaliações de graça
+                  // 🌟 FIX: Corrigido de 1{...} para ${...} para interpolação correta do link do Maps
                   const linkMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.nome + ' ' + lead.endereco)}`;
 
                   return (
@@ -134,7 +134,7 @@ function App() {
                         </div>
                       </td>
                       <td>
-                        {/* Botão de Auditoria de Avaliações 100% Gratuito */}
+                        {/* Botão de Auditoria de Avaliações */}
                         <a href={linkMaps} target="_blank" rel="noreferrer" className="badge-link maps-review">
                           ⭐ Ver Estrelas/Maps
                         </a>

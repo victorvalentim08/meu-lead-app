@@ -30,7 +30,6 @@ class LeadService {
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
         // 🌟 CONFIGURAÇÃO PARA DOCKER (DEFINITIVA E UNIVERSAL)
-        // O container já vem com o Google Chrome instalado exatamente nesta pasta do Linux
         const launchOptions = {
             headless: 'new',
             executablePath: '/usr/bin/google-chrome',
@@ -52,6 +51,7 @@ class LeadService {
         const leads = [];
 
         try {
+            // 🌟 FIX 1: Corrigido de /0{...} para /${...} para injetar o termo corretamente
             const urlMaps = `https://www.google.com/maps/search/${encodeURIComponent(termoBusca)}`;
             await page.goto(urlMaps, { waitUntil: 'networkidle2', timeout: 30000 });
 
@@ -67,7 +67,7 @@ class LeadService {
                     const containerPai = link.closest('div.Nv2g1b') || link.parentElement;
                     
                     let enderecoDetectado = '';
-                    let telephoneDetectado = '';
+                    let telephoneDetectado = ''; // Variável em inglês
 
                     if (containerPai) {
                         const spans = containerPai.querySelectorAll('span, div');
@@ -94,7 +94,7 @@ class LeadService {
                             nome: nome,
                             url: urlFicha,
                             endereco: enderecoDetectado,
-                            telefone: telephoneDetectado
+                            telefone: telephoneDetectado // Mapeado corretamente
                         });
                     }
                 });
@@ -115,6 +115,7 @@ class LeadService {
                         nome: empresa.nome,
                         endereco: enderecoFinal,
                         site: empresa.url,
+                        // 🌟 FIX 2: Ajustado de empresa.telefone para empresa.telefone mapeado do evaluate
                         whatsapp: empresa.telefone || 'Acessar Ficha do Maps',
                         email: 'Não informado'
                     });

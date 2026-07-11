@@ -32,7 +32,6 @@ class LeadService {
         // 🌟 CONFIGURAÇÃO PARA DOCKER (DEFINITIVA E UNIVERSAL)
         const launchOptions = {
             headless: 'new',
-            executablePath: '/usr/bin/google-chrome',
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',

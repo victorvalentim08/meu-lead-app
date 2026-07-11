@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const path = require('path');
+const fs = require('fs');
 
 class LeadService {
     async buscarLeads({ tipoEmpresa, cep, cidade, estado }) {
@@ -30,12 +31,27 @@ class LeadService {
         const termoBusca = `${tipoEmpresa} em ${localidadeTexto} - ${ufTexto}`;
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
- 
-        const chromePath = path.join(process.cwd(), '.cache', 'puppeteer', 'chrome', 'linux-148.0.7778.97', 'chrome-linux64', 'chrome');
+        // 🌟 DETECÇÃO 100% DINÂMICA DO CHROME INSTALADO NO BUILD
+        const baseCacheDir = path.join(process.cwd(), '.cache', 'puppeteer', 'chrome');
+        let chromePath = '';
+
+        try {
+            if (fs.existsSync(baseCacheDir)) {
+                const versoes = fs.readdirSync(baseCacheDir);
+                // Procura por qualquer pasta que comece com "linux-" para não depender de números de versão estáticos
+                const pastaVersao = versoes.find(f => f.startsWith('linux-'));
+                
+                if (pastaVersao) {
+                    chromePath = path.join(baseCacheDir, pastaVersao, 'chrome-linux64', 'chrome');
+                    console.log(`[🤖 Puppeteer] Localizado dinamicamente em: ${chromePath}`);
+                }
+            }
+        } catch (err) {
+            console.error("Erro na varredura interna do cache do Chrome:", err.message);
+        }
 
         const launchOptions = {
             headless: 'new',
-            executablePath: chromePath,
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',
@@ -44,6 +60,13 @@ class LeadService {
                 '--single-process'
             ]
         };
+
+        // Aplica o caminho se ele existir fisicamente no servidor
+        if (chromePath && fs.existsSync(chromePath)) {
+            launchOptions.executablePath = chromePath;
+        } else {
+            console.log("[⚠️ Puppeteer] Caminho autodetectado inválido, tentando inicialização fallback padrão...");
+        }
 
         const browser = await puppeteer.launch(launchOptions);
         const page = await browser.newPage();

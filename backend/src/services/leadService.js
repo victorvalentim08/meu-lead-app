@@ -29,9 +29,13 @@ class LeadService {
         const termoBusca = `${tipoEmpresa} em ${localidadeTexto} - ${ufTexto}`;
         console.log(`[🎯 Extração Estruturada] Lendo cartões reais para: ${termoBusca}`);
 
+        // 🌟 CONFIGURAÇÃO PARA CACHE PADRÃO DO RENDER
+        // Aponta diretamente para onde o instalador global coloca o Chrome no servidor deles
+        const chromePath = '/opt/render/.cache/puppeteer/chrome/linux-148.0.7778.97/chrome-linux64/chrome';
+
         const launchOptions = {
             headless: 'new',
-            executablePath: '/usr/bin/google-chrome-stable',
+            executablePath: chromePath,
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',
